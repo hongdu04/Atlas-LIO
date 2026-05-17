@@ -15,6 +15,10 @@ find_package(livox_ros_driver2 REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(tf2_eigen REQUIRED)
+find_package(PCL 1.12 REQUIRED)
+find_package(Eigen3 REQUIRED)
+find_package(glog REQUIRED)
+find_package(pcl_conversions REQUIRED)
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
@@ -22,6 +26,25 @@ find_package(tf2_eigen REQUIRED)
 rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/Pose6D.msg"
   DEPENDENCIES std_msgs sensor_msgs geometry_msgs
+)
+
+add_executable(atlaslio_mapping src/laserMapping.cpp include/ikd-Tree/ikd_Tree.cpp src/preprocess.cpp)
+ament_target_dependencies(atlaslio_mapping 
+  rclcpp
+  geometry_msgs  
+  std_msgs
+  sensor_msgs
+  tf2_eigen
+  livox_ros_driver2
+  pcl_conversions
+  rosidl_default_runtime
+)
+
+include_directories(
+  include
+  ${EIGEN3_INCLUDE_DIRS}
+  ${PCL_INCLUDE_DIRS}
+  ${Glog_INCLUDE_DIRS}
 )
 
 
